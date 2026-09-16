@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bicyr status</title>
+<meta name="description" content="Service status for Bicyr, published independently of the Bicyr platform.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fafaf9; --fg: #1c1917; --muted: #57534e; --line: #e7e5e4; --ok: #15803d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0c0a09; --fg: #f5f5f4; --muted: #a8a29e; --line: #292524; --ok: #4ade80; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 40rem; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
+  h1 { font-size: 1.1rem; font-weight: 600; margin: 0 0 2rem; }
+  .state { display: flex; gap: .65rem; align-items: center; margin: 0;
+           font-size: 1.4rem; font-weight: 600; }
+  .dot { width: .75rem; height: .75rem; border-radius: 50%; background: var(--ok); flex: none; }
+  .updated { color: var(--muted); margin: .35rem 0 2.25rem; }
+  h2 { font-size: 1rem; font-weight: 600; margin: 2.5rem 0 .5rem;
+       padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  p { margin: .5rem 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Bicyr status</h1>
+
+  <p class="state"><span class="dot" aria-hidden="true"></span>No incident declared</p>
+  <p class="updated">Last updated <time datetime="2026-09-16T19:44Z">16 September 2026, 19:44 UTC</time></p>
+
+  <p>When an incident affects Bicyr, it is posted here with what is affected and when the next update is due.</p>
+  <p>This page is published independently of the Bicyr platform, so it stays reachable when the platform does not.</p>
+
+  <h2>Incident history</h2>
+  <p>No incidents recorded.</p>
+</main>
+</body>
+</html>
