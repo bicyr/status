@@ -1,0 +1,87 @@
+# Upptime @v1.44.1, adapted for bicyr/status (OD-412, bicyr/.github#620).
+# Maintained by hand; see the header of uptime.yml for what differs from the
+# template and why.
+#
+# Runs when .upptimerc.yml changes on main, which includes the merge that
+# installs Upptime: that run writes the first history, README summary and
+# graphs, and publishes the first site to the gh-pages branch.
+#
+# Removed from the template: the "Update template" step. It regenerates every
+# workflow from upstream, which would undo the pins and permissions here, and
+# `github.token` cannot write .github/workflows/ in any case.
+
+name: Setup CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".upptimerc.yml"
+  repository_dispatch:
+    types: [setup]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: write # commit history/, api/, README.md; push gh-pages
+  issues: write # the response-time pass runs the same check, issues included
+  actions: write # dispatch Graphs CI (workflow_dispatch works with github.token)
+jobs:
+  release:
+    name: Setup Upptime
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ github.token }}
+      - name: Update response time
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "response-time"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
+      - name: Update summary in README
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "readme"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
+      - name: Generate graphs
+        id: dispatch_graphs
+        uses: benc-uk/workflow-dispatch@d004979be141727c7a17c28f603e2facc40d0855 # v1.3.3
+        continue-on-error: true
+        with:
+          workflow: Graphs CI
+          token: ${{ github.token }}
+      - name: Setup Node.js for direct graph generation
+        if: steps.dispatch_graphs.outcome == 'failure'
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "20"
+      - name: Generate graphs directly if dispatch fails
+        if: steps.dispatch_graphs.outcome == 'failure'
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "graphs"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
+      - name: Generate site
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "site"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
+      - uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        name: GitHub Pages Deploy
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: "site/status-page/__sapper__/export/"
+          force_orphan: "false"
+          user_name: "Upptime Bot"
+          user_email: "73812536+upptime-bot@users.noreply.github.com"

@@ -1,0 +1,76 @@
+# Upptime configuration for status.bicyr.com (OD-412, bicyr/.github#620).
+#
+# The workflows in .github/workflows are NOT generated from this file: the
+# template-update machinery is removed (see README, "About"), so a change to
+# a schedule here must be made in the workflow by hand as well.
+owner: bicyr
+repo: status
+
+# One check per production host. Each carries the status code the healthy
+# page answers with and a string only the healthy page renders, so a
+# Cloudflare error page or an empty 200 reads as down, not up.
+#
+# payments.bicyr.com is deliberately absent: the Worker answers one path,
+# the Stripe webhook, and 404s everything else by design (bicyr/bicyr#705).
+# It has no health path to check, and publishing a check against the webhook
+# path in this public repository would announce the one path the Worker is
+# built to keep quiet. Add it here when it grows a health route.
+#
+# Each slug is also the label Upptime puts on, and searches for, that site's
+# incident issues. The Operations Hub's own label must never equal one.
+sites:
+  - name: bicyr.com
+    slug: bicyr-com
+    url: https://bicyr.com
+    expectedStatusCodes:
+      - 200
+    # The brand home's body-root marker, the SURFACE_MARKERS contract in
+    # bicyr/bicyr apps/shell/src/chrome/markers.ts.
+    __dangerous__body_down_if_text_missing: 'data-testid="brand-home"'
+  - name: Ami
+    slug: ami
+    url: https://ami.bicyr.com
+    expectedStatusCodes:
+      - 200
+    __dangerous__body_down_if_text_missing: "<title>Bicyr Ami</title>"
+  - name: Cangor
+    slug: cangor
+    url: https://cangor.bicyr.com
+    expectedStatusCodes:
+      - 200
+    __dangerous__body_down_if_text_missing: "<title>Bicyr Cangor</title>"
+
+# Upptime is never on the paging path (OD-412 ruling 3). No notification is
+# configured, and the empty allowlist means no repository secret is handed to
+# the monitor at all, so adding a NOTIFICATION_* secret later changes nothing.
+secrets: []
+
+# Documentation of the schedules the workflows carry (the uptime check runs
+# every five minutes on an offset minute: 3, 8, 13, ...).
+workflowSchedule:
+  uptime: "3-59/5 * * * *"
+  responseTime: "0 23 * * *"
+  graphs: "0 0 * * *"
+  summary: "0 0 * * *"
+  staticSite: "0 1 * * *"
+
+# Upptime must never close or delete an issue it did not open. It closes only
+# issues labelled `status` AND a site slug, and maintenance issues past their
+# end time; this switches off its deletion of short-lived closed `status`
+# issues, which would otherwise reach Operations Hub incidents too.
+skipDeleteIssues: true
+# The repository's description, topics and homepage are set by hand.
+skipDescriptionUpdate: true
+skipTopicsUpdate: true
+skipHomepageUpdate: true
+
+status-website:
+  cname: status.bicyr.com
+  name: Bicyr status
+  introTitle: "Bicyr status"
+  introMessage: "The live state of Bicyr's production services, checked every five minutes. Incidents are posted here as they happen."
+  navbar:
+    - title: Status
+      href: /
+    - title: GitHub
+      href: https://github.com/$OWNER/$REPO

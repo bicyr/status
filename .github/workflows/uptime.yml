@@ -1,0 +1,45 @@
+# Upptime @v1.44.1 (https://github.com/upptime/upptime), adapted for
+# bicyr/status (OD-412, bicyr/.github#620). This file is maintained by hand:
+# the template's self-update machinery is removed, so nothing regenerates it.
+#
+# Adaptations from the template, the same in every workflow here:
+# - The only credential is the workflow's own `github.token`. The template's
+#   GitHub App and GH_PAT fallbacks are removed, so adding such a secret
+#   later does not silently change what these jobs act as.
+# - `permissions:` is explicit, because the repository default is read-only.
+# - SECRETS_CONTEXT is empty: no repository secret reaches the monitor, so no
+#   notification can be configured by adding one (OD-412 ruling 3).
+# - Third-party actions are pinned to full commit SHAs.
+
+name: Uptime CI
+on:
+  schedule:
+    # Every five minutes on an offset minute (3, 8, 13, ...), away from the
+    # top-of-the-hour crowd on the shared runners.
+    - cron: "3-59/5 * * * *"
+  repository_dispatch:
+    types: [uptime]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: write # commit history/ and api/ to main
+  issues: write # open and close this monitor's own incident issues
+jobs:
+  release:
+    name: Check status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ github.token }}
+      - name: Check endpoint status
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "update"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
