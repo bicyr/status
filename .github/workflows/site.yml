@@ -1,0 +1,52 @@
+# Upptime @v1.44.1, adapted for bicyr/status (OD-412, bicyr/.github#620).
+# Maintained by hand; see the header of uptime.yml for what differs from the
+# template and why.
+#
+# The page is static but its data is not: it reads history and incidents from
+# this repository in the visitor's browser, so a status change shows without a
+# rebuild. The daily rebuild only refreshes the shell. Commits the monitor
+# pushes with `github.token` trigger no workflow, so this schedule, not a push,
+# is what keeps the site current.
+
+name: Static Site CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - "assets/**"
+  schedule:
+    - cron: "0 1 * * *"
+  repository_dispatch:
+    types: [static_site]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: write # push the built site to the gh-pages branch
+jobs:
+  release:
+    name: Build and deploy site
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ github.token }}
+      - name: Generate site
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "site"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
+      - uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        name: GitHub Pages Deploy
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: "site/status-page/__sapper__/export/"
+          force_orphan: "false"
+          user_name: "Upptime Bot"
+          user_email: "73812536+upptime-bot@users.noreply.github.com"

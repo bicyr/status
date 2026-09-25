@@ -1,0 +1,34 @@
+# Upptime @v1.44.1, adapted for bicyr/status (OD-412, bicyr/.github#620).
+# Maintained by hand; see the header of uptime.yml for what differs from the
+# template and why.
+
+name: Summary CI
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  repository_dispatch:
+    types: [summary]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: write # commit README.md and history/summary.json to main
+  issues: read
+jobs:
+  release:
+    name: Generate README
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ github.token }}
+      - name: Update summary in README
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "readme"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"

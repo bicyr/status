@@ -1,0 +1,37 @@
+# Upptime @v1.44.1, adapted for bicyr/status (OD-412, bicyr/.github#620).
+# Maintained by hand; see the header of uptime.yml for what differs from the
+# template and why.
+
+name: Graphs CI
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  repository_dispatch:
+    types: [graphs]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
+  cancel-in-progress: false
+permissions:
+  contents: write # commit graphs/ to main
+jobs:
+  release:
+    name: Generate graphs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ github.token }}
+      - name: Setup Node.js for graphs
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "20"
+      - name: Generate graphs
+        uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
+        with:
+          command: "graphs"
+        env:
+          GH_PAT: ${{ github.token }}
+          SECRETS_CONTEXT: "{}"
