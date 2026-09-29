@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js for graphs
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Generate graphs
         uses: upptime/uptime-monitor@8be193bbcb957a3a917d2bb16a0c96959778a889 # v1.44.1
         with:
