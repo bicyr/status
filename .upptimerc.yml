@@ -29,10 +29,15 @@ sites:
     __dangerous__body_down_if_text_missing: 'data-testid="brand-home"'
   - name: Ami
     slug: ami
-    url: https://ami.bicyr.com
+    # ami's `/` renders nothing since bicyr/ami#459 (released 29 September
+    # 2026): it answers a 303 to /sign-in or the account, by design, so this
+    # read "down" from 18:16Z that day. The sign-in page is where every
+    # signed-out arrival lands. The slug stays, so the history carries on.
+    # Same change as the Google Cloud probe (bicyr/.github#645).
+    url: https://ami.bicyr.com/sign-in
     expectedStatusCodes:
       - 200
-    __dangerous__body_down_if_text_missing: "<title>Bicyr Ami</title>"
+    __dangerous__body_down_if_text_missing: "<title>Sign in · Bicyr</title>"
   - name: Cangor
     slug: cangor
     url: https://cangor.bicyr.com
