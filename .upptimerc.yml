@@ -1,4 +1,4 @@
-# Upptime configuration for status.bicyr.com (OD-412, bicyr/.github#620).
+# Upptime configuration for status.pilarres.com (OD-412, bicyr/.github#620).
 #
 # The workflows in .github/workflows are NOT generated from this file: the
 # template-update machinery is removed (see README, "About"), so a change to
@@ -70,7 +70,7 @@ skipTopicsUpdate: true
 skipHomepageUpdate: true
 
 status-website:
-  cname: status.bicyr.com
+  cname: status.pilarres.com
   name: Bicyr status
   introTitle: "Bicyr status"
   introMessage: "The live state of Bicyr's production services, checked every five minutes. Incidents are posted here as they happen."
