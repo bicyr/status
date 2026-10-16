@@ -5,7 +5,8 @@ name: CodeQL
 # request. Pushes to main, pull requests that change more than documentation
 # (a newer push cancels the older scan), and weekly on the default branch so
 # a pull request's scan always has a full analysis to compare against.
-# Default setup is switched off only after this has run green once.
+# Default setup blocks advanced uploads while on, so it is switched off right
+# before this merges and the first run confirmed green.
 
 on:
   push:
