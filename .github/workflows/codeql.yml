@@ -1,0 +1,52 @@
+name: CodeQL
+
+# [ORG-843, bicyr/.github#843] Code scanning from a workflow this repository
+# owns, in place of default setup, which scanned every push and every pull
+# request. Pushes to main, pull requests that change more than documentation
+# (a newer push cancels the older scan), and weekly on the default branch so
+# a pull request's scan always has a full analysis to compare against.
+# Default setup blocks advanced uploads while on, so it is switched off right
+# before this merges and the first run confirmed green.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**/*.md", "docs/**"]
+  pull_request:
+    branches: [main]
+    paths-ignore: ["**/*.md", "docs/**"]
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: codeql-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [actions]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+      - uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          category: /language:${{ matrix.language }}
