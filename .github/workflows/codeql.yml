@@ -14,7 +14,9 @@ on:
     paths-ignore: ["**/*.md", "docs/**"]
   pull_request:
     branches: [main]
-    paths-ignore: ["**/*.md", "docs/**"]
+    # [ORG-1040, bicyr/.github#1040] Code paths only: a pull request that changes
+    # none of them is not scanned. Pushes to main and the weekly run still scan all.
+    paths: [".github/workflows/**", ".github/actions/**"]
   schedule:
     - cron: "23 4 * * 1"
   workflow_dispatch:
@@ -29,6 +31,8 @@ permissions:
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
+    # [ORG-1040, bicyr/.github#1040] Version packages pull requests carry no code to scan.
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
