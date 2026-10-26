@@ -33,7 +33,7 @@ jobs:
     name: Analyze (${{ matrix.language }})
     # [ORG-1040, bicyr/.github#1040] Version packages pull requests carry no code to scan.
     if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       contents: read
