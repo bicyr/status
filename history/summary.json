@@ -22,21 +22,21 @@
     "url": "https://ami.bicyr.com/sign-in",
     "icon": "https://icons.duckduckgo.com/ip3/ami.bicyr.com.ico",
     "slug": "ami",
-    "status": "down",
+    "status": "up",
     "uptime": "99.02%",
-    "uptimeDay": "100.00%",
+    "uptimeDay": "99.97%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "99.02%",
-    "time": 470,
-    "timeDay": 452,
-    "timeWeek": 412,
-    "timeMonth": 463,
-    "timeYear": 470,
+    "time": 732,
+    "timeDay": 5949,
+    "timeWeek": 1791,
+    "timeMonth": 786,
+    "timeYear": 732,
     "dailyMinutesDown": {
       "2026-09-30": 157,
       "2026-09-29": 343,
-      "2026-10-30": 0
+      "2026-10-30": 1
     }
   },
   {
