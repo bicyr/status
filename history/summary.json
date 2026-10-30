@@ -11,9 +11,9 @@
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
     "time": 355,
-    "timeDay": 343,
-    "timeWeek": 378,
-    "timeMonth": 366,
+    "timeDay": 333,
+    "timeWeek": 376,
+    "timeMonth": 375,
     "timeYear": 355,
     "dailyMinutesDown": {}
   },
@@ -22,20 +22,21 @@
     "url": "https://ami.bicyr.com/sign-in",
     "icon": "https://icons.duckduckgo.com/ip3/ami.bicyr.com.ico",
     "slug": "ami",
-    "status": "up",
-    "uptime": "98.99%",
+    "status": "down",
+    "uptime": "99.02%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
-    "uptimeMonth": "99.69%",
-    "uptimeYear": "98.99%",
-    "time": 471,
-    "timeDay": 318,
-    "timeWeek": 386,
-    "timeMonth": 461,
-    "timeYear": 471,
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "99.02%",
+    "time": 470,
+    "timeDay": 452,
+    "timeWeek": 412,
+    "timeMonth": 463,
+    "timeYear": 470,
     "dailyMinutesDown": {
       "2026-09-30": 157,
-      "2026-09-29": 343
+      "2026-09-29": 343,
+      "2026-10-30": 0
     }
   },
   {
@@ -49,11 +50,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
-    "time": 656,
-    "timeDay": 263,
-    "timeWeek": 488,
-    "timeMonth": 477,
-    "timeYear": 656,
+    "time": 652,
+    "timeDay": 463,
+    "timeWeek": 526,
+    "timeMonth": 489,
+    "timeYear": 652,
     "dailyMinutesDown": {}
   }
 ]
